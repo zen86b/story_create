@@ -1,21 +1,28 @@
 import scipy
 from transformers import AutoProcessor, BarkModel
-
-processor = AutoProcessor.from_pretrained("suno/bark")
-model = BarkModel.from_pretrained("suno/bark").to("cuda")
+import os
 
 
-def tts(text, output_name):
-    text_prompt = f"""
-        {text}
-    """
+def tts(texts, output_dir):
+    processor = AutoProcessor.from_pretrained("suno/bark")
+    model = BarkModel.from_pretrained("suno/bark").to("cuda")
 
-    inputs = processor(text_prompt, voice_preset="v2/en_speaker_6")
+    names = []
+    for idx, text in enumerate(texts):
+        text_prompt = f"""
+            {text}
+        """
 
-    audio_array = model.generate(**inputs.to("cuda"))
-    audio_array = audio_array.cpu().numpy().squeeze()
-    sample_rate = model.generation_config.sample_rate
-    scipy.io.wavfile.write(f"{output_name}.wav", rate=sample_rate, data=audio_array)
+        inputs = processor(text_prompt, voice_preset="v2/en_speaker_6")
+
+        audio_array = model.generate(**inputs.to("cuda"))
+        audio_array = audio_array.cpu().numpy().squeeze()
+        sample_rate = model.generation_config.sample_rate
+        name = os.path.join(output_dir, f"{idx}.wav")
+        scipy.io.wavfile.write(name, rate=sample_rate, data=audio_array)
+        names.append(name)
+    
+    return names
 
 if __name__ == "__main__":
-    tts("But for now, Lily was content to simply enjoy the company of her new friend.","output")
+    tts(["But for now, Lily was content to simply enjoy the company of her new friend.","output"])

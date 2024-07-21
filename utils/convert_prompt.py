@@ -25,6 +25,9 @@ def convert_prompt(inputs):
 				},
 			]
 		)
-		print(output["choices"][0]["message"]["content"])
+		outputs.append(output)
+	return outputs
 
-convert_prompt(["In the year 2042, robots were no longer a novelty. They were everywhere, doing all sorts of jobs that humans used to do."])
+
+if __name__ == "__main__":
+	convert_prompt(["In the year 2042, robots were no longer a novelty. They were everywhere, doing all sorts of jobs that humans used to do."])
