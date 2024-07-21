@@ -8,7 +8,7 @@ from utils.text_chunk import split_into_chunks
 from utils.image_gen import image_generate
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--input", type=str, type=str, help="Path to input.")
+parser.add_argument("--input", type=str, help="Path to input.")
 
 args = parser.parse_args()
 timestamp = time.strftime("%Y-%m-%d-%H-%M-%S", time.gmtime())
