@@ -25,7 +25,8 @@ def convert_prompt(inputs):
 				},
 			]
 		)
-		outputs.append(output)
+		print(output["choices"][0]["message"]["content"])
+		outputs.append(output["choices"][0]["message"]["content"])
 	return outputs
 
 
