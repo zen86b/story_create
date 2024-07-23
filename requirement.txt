@@ -1,7 +1,8 @@
-llama-cpp-python @ https://abetlen.github.io/llama-cpp-python/whl/cu124
 diffusers
 transformers
 compel
 peft
 accelerate
 scipy
+videopy
+gdown

@@ -25,4 +25,4 @@ def tts(texts, output_dir):
     return names
 
 if __name__ == "__main__":
-    tts(["But for now, Lily was content to simply enjoy the company of her new friend.","output"])
+    tts(["But for now, Lily was content to simply enjoy the company of her new friend."],"")

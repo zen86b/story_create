@@ -17,7 +17,7 @@ def split_into_chunks(text):
             chunks.append(chunk)
         else:
             chunk = sentences[i]
-            chunks.append(chunk)
+            chunks.append(chunk.strip())
 
     return chunks
 

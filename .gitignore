@@ -1,0 +1,69 @@
+export/
+diffuser_model
+*.rdb
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local development settings
+.env
+.vscode/
+tmp/*
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# Celery beat schedule file
+celerybeat-schedule
+
+# Other generated files
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+# IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Compiled Python modules
+*.pyd
+*.so
+*.dll
+
+# macOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
+Desktop.ini
+
+# Flask cache directory
+__pycache__/
+app/__pycache__/
+instance/__pycache__/
+migrations/__pycache__/
+tests/__pycache__/
+wsgi/__pycache__/
+
+# Celery task files
+celerybeat.pid
+celerybeat-schedule
+celeryd.pid
+celeryd.log
+
+# Celery worker state
+celery_worker_state
+
+# Celery task results
+celery-task-meta-*
+
+.ipynb_checkpoints/
+utils/__pycache__

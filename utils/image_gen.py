@@ -73,7 +73,7 @@ def image_generate(
         name = os.path.join(output_dir, f"{idx}.png")
         names.append(name)
         images[0].save(name)
-
+    pipe.to("cpu")
     return {"image": names, "execution_time": round(time.time() - start_time, 2)}
 
 if __name__ == "__main__":
