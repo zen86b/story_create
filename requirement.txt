@@ -4,5 +4,5 @@ compel
 peft
 accelerate
 scipy
-videopy
+moviepy
 gdown
