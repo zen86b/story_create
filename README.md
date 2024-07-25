@@ -3,7 +3,7 @@
 Install `llama-cpp-python`, change version of `llama-cpp-python` to fix with `CUDA` version on machine
 
 ```bash
-    pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/12.4
+    pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/124
 ```
 
 Install other lib

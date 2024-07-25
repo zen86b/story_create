@@ -4,6 +4,8 @@ import json
 import textwrap
 import numpy as np
 import scipy.io.wavfile as wav
+import librosa
+import soundfile as sf
 import moviepy.editor as mpe
 
 
@@ -13,9 +15,17 @@ def crop(img, x, y, w, h):
     return img[y0:y1, x0:x1]
 
 
-def create_image_video(image_files, durations, transcripts, output_file="output.mp4"):
-    video_dim = (1024, 1024)
-    fps = 30
+def create_image_video(
+        image_files,
+        durations,
+        transcripts,
+        fps,
+        sub_position_vertical,
+        sub_position_horizontal,
+        sub_alignment,
+        sub_color,
+        output_file="output.mp4"):
+    video_dim = cv2.imread(image_files[0], cv2.IMREAD_COLOR).shape[:2]
     start_center = (0.4, 0.6)
     end_center = (0.5, 0.5)
     start_scale = 0.7
@@ -46,13 +56,22 @@ def create_image_video(image_files, durations, transcripts, output_file="output.
                 cropped, dsize=video_dim, interpolation=cv2.INTER_LINEAR
             )
 
+# Write subtitle
+            if sub_color == "yellow":
+                color=(255, 255, 0)
+            else:
+                color=(255, 255, 255)
+
             transcript_wraped = textwrap.wrap(transcript, width=50)
+            gap = cv2.getTextSize(line, fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, thickness=2)[0][1] + 10
+            max_x = img.shape[0] -  len(transcript_wraped)*gap
+
             for i, line in enumerate(transcript_wraped):
                 textsize = cv2.getTextSize(line, fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, thickness=2)[0]
 
                 gap = textsize[1] + 10
 
-                y = int((1.5*img.shape[0] + textsize[1]) / 2) + i * gap
+                y = max_x * sub_position_vertical + i * gap
                 x = int((img.shape[1] - textsize[0]) / 2)
                 scaled = cv2.putText(
                     scaled,
@@ -60,7 +79,7 @@ def create_image_video(image_files, durations, transcripts, output_file="output.
                     org=(x, y),
                     fontFace=cv2.FONT_HERSHEY_SIMPLEX,
                     fontScale=1,
-                    color=(255, 255, 255),
+                    color=color,
                     thickness=2,
                     lineType=cv2.LINE_AA,
                 )
@@ -75,12 +94,12 @@ def create_image_video(image_files, durations, transcripts, output_file="output.
     vidwriter.release()
 
 
-def read_and_concatenate_wavs(filenames, output_filename):
+def read_and_concatenate_wavs(filenames, speed, output_filename):
     durations = []
     audio_data = []
     for filename in filenames:
         fs, data = wav.read(filename)
-        duration = len(data) / fs
+        duration = len(data) / fs / speed
         durations.append(duration)
 
         data = data.astype(np.float32)
@@ -88,13 +107,18 @@ def read_and_concatenate_wavs(filenames, output_filename):
         audio_data.append(data)
 
     concatenated_data = np.concatenate(audio_data)
-
-    wav.write(output_filename, fs, concatenated_data)
-
+    y_shifted = librosa.effects.pitch_shift(y=concatenated_data, sr=24000, n_steps=int(round(-12 * np.log2(speed))))
+    sf.write(output_filename, y_shifted, int(24000*speed), 'PCM_24')
     return durations
 
 
-def create_video(dir_path):
+def create_video(dir_path,
+                 fps=60,
+                 speed=1.0,
+                 sub_position_vertical=1.0,
+                 sub_position_horizontal=1.0,
+                 sub_alignment="mid",
+                 sub_color="yellow"):
     image_files = sorted(os.listdir(dir_path + "/image"), key=lambda x:int(x.split(".")[0]))
     image_files = [os.path.join(dir_path, "image", fn) for fn in image_files]
 
@@ -108,18 +132,25 @@ def create_video(dir_path):
     assert len(image_files) == len(voice_files), "Images and Voices do not have the same number of files"
 
     durations = read_and_concatenate_wavs(
-        voice_files, output_filename=os.path.join(dir_path, "combined_audio.wav")
+        voice_files,
+        speed=speed,
+        output_filename=os.path.join(dir_path, "combined_audio.wav")
     )
     create_image_video(
         image_files,
         durations,
         transcripts,
+        fps,
+        sub_position_vertical=1.0,
+        sub_position_horizontal=1.0,
+        sub_alignment="mid",
+        sub_color=sub_color,
         output_file=os.path.join(dir_path, "image_video.mp4"),
     )
     video = mpe.VideoFileClip(os.path.join(dir_path, "image_video.mp4"))
     voice = mpe.AudioFileClip(os.path.join(dir_path, "combined_audio.wav"))
     final_video = video.set_audio(voice)
-    final_video.write_videofile(os.path.join(dir_path, "final_video.mp4"),codec= 'libx264' ,audio_codec='libvorbis')
+    final_video.write_videofile(os.path.join(dir_path, "final_video.mp4"), codec= 'libx264', audio_codec='libvorbis')
 
 if __name__ == "__main__":
-    create_video("export/2024-07-23-08-09-40")
+    create_video("export/2024-07-23-08-09-40",speed=1.0,fps=30)

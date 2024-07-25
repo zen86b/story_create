@@ -3,7 +3,7 @@ from transformers import AutoProcessor, BarkModel
 import os
 
 
-def tts(texts, output_dir):
+def tts(texts, voice_preset, output_dir):
     processor = AutoProcessor.from_pretrained("suno/bark")
     model = BarkModel.from_pretrained("suno/bark").to("cuda")
 
@@ -13,7 +13,7 @@ def tts(texts, output_dir):
             {text}
         """
 
-        inputs = processor(text_prompt, voice_preset="v2/en_speaker_6")
+        inputs = processor(text_prompt, voice_preset=f"v2/{voice_preset}")
 
         audio_array = model.generate(**inputs.to("cuda"))
         audio_array = audio_array.cpu().numpy().squeeze()
@@ -25,4 +25,4 @@ def tts(texts, output_dir):
     return names
 
 if __name__ == "__main__":
-    tts(["But for now, Lily was content to simply enjoy the company of her new friend."],"test_voice.wav")
+    tts(["this is a voice of a man"],"")
