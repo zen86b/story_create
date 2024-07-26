@@ -14,7 +14,7 @@ def split_into_chunks(text):
         if i + 1 < len(sentences):
             # Create a chunk from the current sentence and the next sentence
             chunk = sentences[i] + sentences[i + 1]
-            chunks.append(chunk)
+            chunks.append(chunk.strip())
         else:
             chunk = sentences[i]
             chunks.append(chunk.strip())
