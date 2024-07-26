@@ -28,8 +28,50 @@ Dowload model
 
 `tmp.txt` contains a long paragraph of text
 
+Running full pipeline (chunk text, gen voices, gen images, create video)
+
+```bash
+    python3 run.py --input tmp.txt --create-video
+```
+
+Running generate only
+
 ```bash
     python3 run.py --input tmp.txt
+```
+
+More option
+
+```bash
+    python3 run.py -h
+```
+
+Example:
+
+```bash
+    python3 run.py \
+    --input tmp.txt --create-video \
+    --height 1080 --width 1920 \
+    --voice-preset es_speaker_0 \
+    --fps 60 \
+    --speed 1.2 \
+    --sub-position-vertical 0.9 \
+    --sub-position-horizontal 0.5 \
+    --sub-alignment mid \
+    --sub-color yellow
+```
+
+After generation, you can re-create video with other option
+
+```bash
+    python3 render_video.py \
+    --input export/2024-01-01-09:00:00 \
+    --fps 60 \
+    --speed 1.2 \
+    --sub-position-vertical 0.9 \
+    --sub-position-horizontal 0.5 \
+    --sub-alignment mid \
+    --sub-color yellow
 ```
 
 # Docs
