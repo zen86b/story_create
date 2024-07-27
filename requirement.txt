@@ -3,6 +3,8 @@ transformers
 compel
 peft
 accelerate
+opencv-python
 scipy
 moviepy
 gdown
+librosa

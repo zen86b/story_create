@@ -10,6 +10,7 @@ Install other lib
 
 ```bash
 pip install -r requirement.txt
+apt-get install libgl1
 ```
 
 Dowload model

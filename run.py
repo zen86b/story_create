@@ -37,16 +37,21 @@ os.mkdir(os.path.join(output_dir, "image"))
 with open(args.input, "r") as f:
     content = f.read()
 
+print("*** Start text chunk ***")
 # Text chunk
 text_chunks = split_into_chunks(content)
 with open(os.path.join(output_dir, "text_chunk.json"), "w") as f:
     json_str = json.dump({"text_chunks": text_chunks}, f, indent=4)
+print("*** Finish text chunk ***")
 
+print("*** Start text transform ***")
 # Transform to prompt
 image_gen_prompt = convert_prompt(text_chunks)
 with open(os.path.join(output_dir, "image_gen_prompt.json"), "w") as f:
     json_str = json.dump({"image_gen_prompts": text_chunks}, f, indent=4)
+print("*** Finish text transform ***")
 
+print("*** Start image generate ***")
 # Image gen
 image_generate(
     image_gen_prompt,
@@ -55,14 +60,18 @@ image_generate(
     width=args.width,
     output_dir=os.path.join(output_dir, "image"),
 )
+print("*** Finish image generate ***")
 
+print("*** Start voice generate ***")
 # Text to speech
 tts(
     text_chunks,
     voice_preset=args.voice_preset,
     output_dir=os.path.join(output_dir, "voice")
 )
+print("*** Finish voice generate ***")
 
+print("*** Start create video ***")
 # Create video
 if args.create_video:
     create_video(
@@ -75,5 +84,5 @@ if args.create_video:
         sub_alignment=args.sub_alignment,
         sub_color=args.sub_color
     )
-
+print("*** Finish create video ***")
 print(f"Result is saved in {output_dir}")

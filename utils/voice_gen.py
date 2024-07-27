@@ -1,11 +1,12 @@
 import scipy
 from transformers import AutoProcessor, BarkModel
 import os
-
+import torch
+import numpy as np
 
 def tts(texts, voice_preset, output_dir):
     processor = AutoProcessor.from_pretrained("suno/bark")
-    model = BarkModel.from_pretrained("suno/bark").to("cuda")
+    model = BarkModel.from_pretrained("suno/bark", torch_dtype=torch.float16).to("cuda")
 
     names = []
     for idx, text in enumerate(texts):
@@ -19,7 +20,7 @@ def tts(texts, voice_preset, output_dir):
         audio_array = audio_array.cpu().numpy().squeeze()
         sample_rate = model.generation_config.sample_rate
         name = os.path.join(output_dir, f"{idx}.wav")
-        scipy.io.wavfile.write(name, rate=sample_rate, data=audio_array)
+        scipy.io.wavfile.write(name, rate=sample_rate, data=audio_array.astype(np.float32))
         names.append(name)
     
     return names
