@@ -28,6 +28,9 @@ def create_image_video(
         output_file="output.mp4"):
     video_dim = cv2.imread(image_files[0], cv2.IMREAD_COLOR).shape[0:2][::-1]
     font_size = 32
+    vidwriter = cv2.VideoWriter(
+        output_file, cv2.VideoWriter_fourcc(*"mp4v"), fps, video_dim
+    )
     if font_type == "":
         font = ImageFont.truetype("font/FreeMono.ttf", font_size)
     else:
@@ -96,19 +99,16 @@ def create_image_video(
             scaled = cv2.resize(
                 cropped, dsize=video_dim, interpolation=cv2.INTER_LANCZOS4
             )
-            img_pil = Image.fromarray(img)
+            img_pil = Image.fromarray(scaled)
             draw = ImageDraw.Draw(img_pil)
             for coor, line in zip(lines_coordinate, transcript_wraped):
                 draw.text(xy=coor,text=line,font=font,fill=color,stroke_width=1)
             scaled = np.array(img_pil)
-            frames.append(scaled)
 
+            vidwriter.write(scaled)
         # write to MP4 file
-    vidwriter = cv2.VideoWriter(
-        output_file, cv2.VideoWriter_fourcc(*"mp4v"), fps, video_dim
-    )
-    for frame in frames:
-        vidwriter.write(frame)
+    
+       
     vidwriter.release()
 
 
