@@ -29,7 +29,7 @@ def create_image_video(
     video_dim = cv2.imread(image_files[0], cv2.IMREAD_COLOR).shape[0:2][::-1]
     font_size = 32
     if font_type == "":
-        font = ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", font_size)
+        font = ImageFont.truetype("font/FreeMono.ttf", font_size)
     else:
         font = ImageFont.truetype(font_type, font_size)
 
