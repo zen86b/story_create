@@ -13,10 +13,12 @@ NEG_PROMPT = "(worst quality)+, (low quality)++, (normal quality)+, lowres, bad 
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--input", type=str,required=True, help="Path to input file which contain the paragraph")
-parser.add_argument("--height", type=int, default=1080, help="Height of generated image")
-parser.add_argument("--width", type=int, default=1920, help="Height of generated image")
+parser.add_argument("--height", type=int, default=720, help="Height of generated image")
+parser.add_argument("--width", type=int, default=1280, help="Width of generated image")
 parser.add_argument("--voice-preset", type=str, default="en_speaker_6", help="Code of voice preset using to generate voice")
 parser.add_argument("--create-video", action="store_true", default=False, help="Enable create video after generation")
+parser.add_argument("--video-dim-h", type=int, default=1080, help="Height of output video")
+parser.add_argument("--video-dim-w", type=int, default=1920, help="Width of output video")
 parser.add_argument("--fps", type=float, default=60, help="Fps of video")
 parser.add_argument("--speed", type=float, default=1.0, help="Speed of video")
 parser.add_argument("--font-type", type=str, default="", help="Path to the font using to write subtitle")
@@ -76,6 +78,8 @@ print("*** Start create video ***")
 if args.create_video:
     create_video(
         output_dir,
+        video_dim_w=args.video_dim_w,
+        video_dim_h=args.video_dim_h,
         fps=args.fps,
         speed=args.speed,
         font_type=args.font_type,

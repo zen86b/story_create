@@ -18,6 +18,8 @@ def crop(img, x, y, w, h):
 def create_image_video(
         image_files,
         durations,
+        video_dim_h,
+        video_dim_w,
         transcripts,
         fps,
         font_type,
@@ -26,7 +28,7 @@ def create_image_video(
         sub_alignment,
         sub_color,
         output_file="output.mp4"):
-    video_dim = cv2.imread(image_files[0], cv2.IMREAD_COLOR).shape[0:2][::-1]
+    video_dim = (video_dim_w, video_dim_h)
     font_size = 32
     vidwriter = cv2.VideoWriter(
         output_file, cv2.VideoWriter_fourcc(*"mp4v"), fps, video_dim
@@ -40,11 +42,10 @@ def create_image_video(
     end_center = (0.5, 0.5)
     start_scale = 0.7
     end_scale = 1.0
-    frames = []
 
     for image_file, duration, transcript in zip(image_files, durations, transcripts):
         img = cv2.imread(image_file, cv2.IMREAD_COLOR)
-        upscale = cv2.resize(img, dsize=(int(img.shape[1]* 4),int(img.shape[0]*4)), interpolation=cv2.INTER_LANCZOS4)
+        upscale = cv2.resize(img, dsize=(int(video_dim_w * 4),int(video_dim_h * 4)), interpolation=cv2.INTER_LANCZOS4)
         orig_shape = upscale.shape[:2]
 
         num_frames = int(fps * duration)
@@ -106,7 +107,6 @@ def create_image_video(
             scaled = np.array(img_pil)
 
             vidwriter.write(scaled)
-        # write to MP4 file
     
        
     vidwriter.release()
@@ -131,6 +131,8 @@ def read_and_concatenate_wavs(filenames, speed, output_filename):
 
 
 def create_video(dir_path,
+                 video_dim_w,
+                 video_dim_h,
                  fps=60,
                  speed=1.0,
                  font_type="",
@@ -156,10 +158,12 @@ def create_video(dir_path,
         output_filename=os.path.join(dir_path, "combined_audio.wav")
     )
     create_image_video(
-        image_files,
-        durations,
-        transcripts,
-        fps,
+        image_files=image_files,
+        durations=durations,
+        transcripts=transcripts,
+        fps=fps,
+        video_dim_w=video_dim_w,
+        video_dim_h=video_dim_h,
         font_type=font_type,
         sub_position_vertical=sub_position_vertical,
         sub_position_horizontal=sub_position_horizontal,
