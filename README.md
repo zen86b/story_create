@@ -52,8 +52,10 @@ Example:
 ```bash
 python3 run.py \
 --input tmp.txt --create-video \
---height 1080 --width 1920 \
+--height 720 --width 1280 \
 --voice-preset es_speaker_0 \
+--video-dim-h 1080 \
+--video-dim-w 1920 \
 --fps 60 \
 --speed 1.2 \
 --sub-position-vertical 0.9 \
@@ -67,6 +69,8 @@ After generation, you can re-create video with other option
 ```bash
 python3 render_video.py \
 --input export/2024-01-01-09:00:00 \
+--video-dim-h 1080 \
+--video-dim-w 1920 \
 --fps 60 \
 --speed 1.2 \
 --sub-position-vertical 0.9 \

@@ -60,7 +60,7 @@ def create_image_video(
 
         # find x_max, y_max which is the max value of x and y where we can start to put text
         gap = font_size + 10 # height of each line
-        y_max = img.shape[0] -  len(transcript_wraped)*gap
+        y_max = video_dim_h -  len(transcript_wraped)*gap
 
         longest_length = 0
         for i, line in enumerate(transcript_wraped):
@@ -68,7 +68,7 @@ def create_image_video(
 
             if textsize[0] > longest_length:
                 longest_length = textsize[0]
-        x_max = img.shape[1] - longest_length
+        x_max = video_dim_w - longest_length
 
         for i, line in enumerate(transcript_wraped):
             textsize = font.getbbox(line)[2:]
