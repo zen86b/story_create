@@ -32,7 +32,7 @@ gdown https://drive.google.com/uc\?export\=download\&confirm\=yTib\&id\=1HaYMgeQ
 Running full pipeline (chunk text, gen voices, gen images, create video)
 
 ```bash
-python3 run.py --input tmp.txt --create-video
+python3 run.py --input tmp.txt --create-video --add-sub
 ```
 
 Running generate only
@@ -58,6 +58,7 @@ python3 run.py \
 --video-dim-w 1920 \
 --fps 60 \
 --speed 1.2 \
+--add-sub \
 --sub-position-vertical 0.9 \
 --sub-position-horizontal 0.5 \
 --sub-alignment mid \
@@ -73,6 +74,7 @@ python3 render_video.py \
 --video-dim-w 1920 \
 --fps 60 \
 --speed 1.2 \
+--add-sub \
 --sub-position-vertical 0.9 \
 --sub-position-horizontal 0.5 \
 --sub-alignment mid \

@@ -22,6 +22,7 @@ def create_image_video(
         video_dim_w,
         transcripts,
         fps,
+        add_sub,
         font_type,
         sub_position_vertical,
         sub_position_horizontal,
@@ -49,38 +50,40 @@ def create_image_video(
         orig_shape = upscale.shape[:2]
 
         num_frames = int(fps * duration)
-    # Write subtitle
-        if sub_color == "yellow":
-            color=(0, 255, 255)
-        else:
-            color=(255, 255, 255)
+        
+        # Calculate all param of subtitle
+        if add_sub:
+            if sub_color == "yellow":
+                color=(0, 255, 255)
+            else:
+                color=(255, 255, 255)
 
-        transcript_wraped = textwrap.wrap(transcript, width=40)
-        lines_coordinate = [] # contain (x,y) coordinate of each row
+            transcript_wraped = textwrap.wrap(transcript, width=40)
+            lines_coordinate = [] # contain (x,y) coordinate of each row
 
-        # find x_max, y_max which is the max value of x and y where we can start to put text
-        gap = font_size + 10 # height of each line
-        y_max = video_dim_h -  len(transcript_wraped)*gap
+            # find x_max, y_max which is the max value of x and y where we can start to put text
+            gap = font_size + 10 # height of each line
+            y_max = video_dim_h -  len(transcript_wraped)*gap
 
-        longest_length = 0
-        for i, line in enumerate(transcript_wraped):
-            textsize = font.getbbox(line)[2:]
+            longest_length = 0
+            for i, line in enumerate(transcript_wraped):
+                textsize = font.getbbox(line)[2:]
 
-            if textsize[0] > longest_length:
-                longest_length = textsize[0]
-        x_max = video_dim_w - longest_length
+                if textsize[0] > longest_length:
+                    longest_length = textsize[0]
+            x_max = video_dim_w - longest_length
 
-        for i, line in enumerate(transcript_wraped):
-            textsize = font.getbbox(line)[2:]
+            for i, line in enumerate(transcript_wraped):
+                textsize = font.getbbox(line)[2:]
 
-            y = y_max * sub_position_vertical + (i+1) * gap
-            if sub_alignment == "left":
-                x = x_max * sub_position_horizontal
-            elif sub_alignment == "mid":
-                x = x_max * sub_position_horizontal + (longest_length - textsize[0])/2
-            elif sub_alignment == "right":
-                x = x_max * sub_position_horizontal + longest_length - textsize[0]
-            lines_coordinate.append((int(x),int(y)))
+                y = y_max * sub_position_vertical + (i+1) * gap
+                if sub_alignment == "left":
+                    x = x_max * sub_position_horizontal
+                elif sub_alignment == "mid":
+                    x = x_max * sub_position_horizontal + (longest_length - textsize[0])/2
+                elif sub_alignment == "right":
+                    x = x_max * sub_position_horizontal + longest_length - textsize[0]
+                lines_coordinate.append((int(x),int(y)))
             
         for alpha in np.linspace(0, 1, num_frames):
             rx = end_center[0] * alpha + start_center[0] * (1 - alpha)
@@ -100,15 +103,17 @@ def create_image_video(
             scaled = cv2.resize(
                 cropped, dsize=video_dim, interpolation=cv2.INTER_LANCZOS4
             )
-            img_pil = Image.fromarray(scaled)
-            draw = ImageDraw.Draw(img_pil)
-            for coor, line in zip(lines_coordinate, transcript_wraped):
-                draw.text(xy=coor,text=line,font=font,fill=color,stroke_width=1)
-            scaled = np.array(img_pil)
+
+            # Write subtitle to video's frame
+            if add_sub:
+                img_pil = Image.fromarray(scaled)
+                draw = ImageDraw.Draw(img_pil)
+                for coor, line in zip(lines_coordinate, transcript_wraped):
+                    draw.text(xy=coor,text=line,font=font,fill=color,stroke_width=1)
+                scaled = np.array(img_pil)
 
             vidwriter.write(scaled)
     
-       
     vidwriter.release()
 
 
@@ -135,6 +140,7 @@ def create_video(dir_path,
                  video_dim_h,
                  fps=60,
                  speed=1.0,
+                 add_sub=False,
                  font_type="",
                  sub_position_vertical=1.0,
                  sub_position_horizontal=1.0,
@@ -164,6 +170,7 @@ def create_video(dir_path,
         fps=fps,
         video_dim_w=video_dim_w,
         video_dim_h=video_dim_h,
+        add_sub=add_sub,
         font_type=font_type,
         sub_position_vertical=sub_position_vertical,
         sub_position_horizontal=sub_position_horizontal,
