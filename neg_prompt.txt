@@ -1,1 +1,14 @@
-put some negative prompt to here
+poorly Rendered face
+poorly drawn face
+poor facial details
+poorly drawn hands
+poorly rendered hands
+low resolution
+Images cut out at the top, left, right, bottom.
+bad composition
+mutated body parts
+blurry image
+disfigured
+oversaturated
+bad anatomy
+deformed body features
