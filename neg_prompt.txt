@@ -12,6 +12,42 @@ disfigured
 oversaturated
 bad anatomy
 deformed body features
+bad anatomy
+bad hands
+three hands
+three legs
+bad arms
+missing legs
+missing arms
+poorly drawn face
+bad face
+fused face
+cloned face
+worst face
+out of frame double
+three crus
+extra crus
+fused crus
+worst feet
+three feet
+fused feet
+fused thigh
+three thigh
+extra thigh
+worst thigh
+missing fingers
+extra fingers
+ugly fingers
+long fingers
+horn
+realistic photo
+extra eyes
+huge eyes
+2girl
+2boy
+amputation
+disconnected limbs
+crowed
 cartoonish, 2D
 illustration
 flat shading
