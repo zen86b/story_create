@@ -12,3 +12,16 @@ disfigured
 oversaturated
 bad anatomy
 deformed body features
+cartoonish, 2D
+illustration
+flat shading
+cell shading
+comic
+anime
+simplistic
+vector art
+low detail
+minimalistic
+outline drawing
+chibi
+caricature
