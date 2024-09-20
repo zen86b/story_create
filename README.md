@@ -74,13 +74,63 @@ python3 render_video.py \
 --video-dim-h 1080 \
 --video-dim-w 1920 \
 --fps 60 \
---speed 1.2 \
+--speed 1 \
 --add-sub \
 --sub-position-vertical 0.9 \
 --sub-position-horizontal 0.5 \
 --sub-alignment mid \
 --sub-color yellow
 ```
+Multi input
+
+```bash
+for file in tmp.txt tmp2.txt tmp3.txt; do
+    python3 run.py \
+    --input "$file" --create-video \
+    --height 1280 --width 720 \
+    --voice-preset es_speaker_0 \
+    --video-dim-h 1920 \
+    --video-dim-w 1080 \
+    --fps 60 \
+    --speed 1 \
+    --sub-position-vertical 0.9 \
+    --sub-position-horizontal 0.5 \
+    --sub-alignment mid \
+    --sub-color yellow
+done
+```
+
+Multi output
+
+```bash
+do
+   python3 run.py \
+   --input tmp.txt --create-video \
+    --height 1280 --width 720 \
+    --voice-preset es_speaker_0 \
+    --video-dim-h 1920 \
+    --video-dim-w 1080 \
+    --fps 60 \
+    --speed 1 \
+    --sub-position-vertical 0.9 \
+    --sub-position-horizontal 0.5 \
+    --sub-alignment mid \
+    --sub-color yellow
+done
+```
+Upload export folder
+
+```bash
+find export/ -type f ! -name "final*.mp4" -exec rm -f {} +
+tar -czvf export_backup.tar.gz export/
+
+curl bashupload.com -T export_backup.tar.gz
+```
+```
+
+
+
+
 
 # Docs
 
