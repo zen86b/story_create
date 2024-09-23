@@ -103,7 +103,7 @@ done
 Multi output
 
 ```bash
-do
+for i in {1..10} do
    python3 run.py \
    --input tmp.txt --create-video \
     --height 1280 --width 720 \
