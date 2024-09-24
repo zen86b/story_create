@@ -56,7 +56,7 @@ def image_generate(
 
         results = pipe(
             prompt=prompt,
-            negative_prompt=negative_prompt,
+            # negative_prompt=negative_prompt,
             height=height,
             width=width,
             num_inference_steps=num_inference_steps,
