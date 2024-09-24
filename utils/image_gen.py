@@ -12,7 +12,7 @@ lora_weight = ""
 
 def image_generate(
     prompts,
-    negative_prompt=None,
+    negative_prompt=None,  # Có thể giữ lại nếu bạn cần sau này
     height=1024,
     width=1024,
     num_inference_steps=50,
@@ -39,24 +39,8 @@ def image_generate(
     names = []
 
     for idx, prompt in enumerate(prompts):
-        # with torch.no_grad():
-        #     compel_proc = Compel(
-        #         tokenizer=[pipe.tokenizer, pipe.tokenizer_2],
-        #         text_encoder=[pipe.text_encoder, pipe.text_encoder_2],
-        #         returned_embeddings_type=ReturnedEmbeddingsType.PENULTIMATE_HIDDEN_STATES_NON_NORMALIZED,
-        #         requires_pooled=[False, True],
-        #     )
-        #     prompt_embeds, pooled_prompt_embeds = compel_proc(prompt)
-        #     if negative_prompt is not None:
-        #         negative_prompt_embeds, negative_pooled_prompt_embeds = compel_proc(
-        #             negative_prompt
-        #         )
-        #     else:
-        #         negative_prompt_embeds, negative_pooled_prompt_embeds = None, None
-
         results = pipe(
             prompt=prompt,
-            negative_prompt=negative_prompt,
             height=height,
             width=width,
             num_inference_steps=num_inference_steps,
@@ -73,4 +57,4 @@ def image_generate(
     return {"image": names, "execution_time": round(time.time() - start_time, 2)}
 
 if __name__ == "__main__":
-    image_generate(prompt=["A bustling cityscape in 2042: Robots of various sizes and shapes work alongside humans, constructing buildings, serving customers at cafes, and maintaining lush gardens. The sun sets over the horizon as the symbiotic duo continues their daily tasks, symbolizing human-robot coexistence and collaboration."])
+    image_generate(prompts=["A bustling cityscape in 2042: Robots of various sizes and shapes work alongside humans, constructing buildings, serving customers at cafes, and maintaining lush gardens. The sun sets over the horizon as the symbiotic duo continues their daily tasks, symbolizing human-robot coexistence and collaboration."])
