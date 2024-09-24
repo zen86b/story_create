@@ -9,7 +9,7 @@ from utils.text_chunk import split_into_chunks
 from utils.image_gen import image_generate
 from utils.video_create import create_video
 
-DEFAULT_NEG_PROMPT = "(worst quality)+, (low quality)++, (normal quality)+, lowres, bad anatomy, bad hands, normal quality, bad eyes"
+DEFAULT_NEG_PROMPT = "lowres, bad anatomy, bad hands, signature, watermarks, ugly, imperfect eyes, skewed eyes, unnatural face, unnatural body, error, extra limb, missing limbs, painting by bad-artist, ugly, blurry, pixelated obscure, unnatural colors, poor lighting, dull, unclear, cropped, lowres, low quality, artifacts, duplicate"
 
 parser = argparse.ArgumentParser()
 # generation param

@@ -4,10 +4,10 @@ import os
 
 import torch
 from compel import Compel, ReturnedEmbeddingsType
-from diffusers import StableDiffusionXLPipeline
+from diffusers import FluxPipeline
 
-model_path = "Lykon/dreamshaper-xl-v2-turbo"
-lora_weight = "model/add-detail-xl.safetensors"
+model_path = "black-forest-labs/FLUX.1-dev"
+lora_weight = ""
 
 
 def image_generate(
@@ -15,8 +15,8 @@ def image_generate(
     negative_prompt=None,
     height=1024,
     width=1024,
-    num_inference_steps=10,
-    guidance_scale=2,
+    num_inference_steps=50,
+    guidance_scale=3.5,
     num_images_per_prompt=1,
     seed=-1,
     output_dir=""
@@ -28,44 +28,40 @@ def image_generate(
         random_seed = round(random.random() * pow(10, random.randint(1, 15)))
         generator = torch.Generator(device="cuda").manual_seed(random_seed)
 
-    pipe = StableDiffusionXLPipeline.from_pretrained(
-        model_path, torch_dtype=torch.float16
+    pipe = FluxPipeline.from_pretrained(
+        model_path, torch_dtype=torch.float16, token="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"
     ).to("cuda")
 
-    if lora_weight != "":
-        pipe.load_lora_weights(lora_weight)
-        lora_opt = {"cross_attention_kwargs": {"scale": 1}}
+    # if lora_weight != "":
+    #     pipe.load_lora_weights(lora_weight)
+    #     lora_opt = {"cross_attention_kwargs": {"scale": 1}}
 
     names = []
 
     for idx, prompt in enumerate(prompts):
-        with torch.no_grad():
-            compel_proc = Compel(
-                tokenizer=[pipe.tokenizer, pipe.tokenizer_2],
-                text_encoder=[pipe.text_encoder, pipe.text_encoder_2],
-                returned_embeddings_type=ReturnedEmbeddingsType.PENULTIMATE_HIDDEN_STATES_NON_NORMALIZED,
-                requires_pooled=[False, True],
-            )
-            prompt_embeds, pooled_prompt_embeds = compel_proc(prompt)
-            if negative_prompt is not None:
-                negative_prompt_embeds, negative_pooled_prompt_embeds = compel_proc(
-                    negative_prompt
-                )
-            else:
-                negative_prompt_embeds, negative_pooled_prompt_embeds = None, None
+        # with torch.no_grad():
+        #     compel_proc = Compel(
+        #         tokenizer=[pipe.tokenizer, pipe.tokenizer_2],
+        #         text_encoder=[pipe.text_encoder, pipe.text_encoder_2],
+        #         returned_embeddings_type=ReturnedEmbeddingsType.PENULTIMATE_HIDDEN_STATES_NON_NORMALIZED,
+        #         requires_pooled=[False, True],
+        #     )
+        #     prompt_embeds, pooled_prompt_embeds = compel_proc(prompt)
+        #     if negative_prompt is not None:
+        #         negative_prompt_embeds, negative_pooled_prompt_embeds = compel_proc(
+        #             negative_prompt
+        #         )
+        #     else:
+        #         negative_prompt_embeds, negative_pooled_prompt_embeds = None, None
 
         results = pipe(
-            prompt_embeds=prompt_embeds,
-            pooled_prompt_embeds=pooled_prompt_embeds,
-            negative_prompt_embeds=negative_prompt_embeds,
-            negative_pooled_prompt_embeds=negative_pooled_prompt_embeds,
+            prompt=prompt,
+            negative_prompt=negative_prompt,
             height=height,
             width=width,
             num_inference_steps=num_inference_steps,
-            num_images_per_prompt=num_images_per_prompt,
             guidance_scale=guidance_scale,
             generator=generator,
-            **lora_opt,
         )
 
         images = results.images
