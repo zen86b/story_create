@@ -4,6 +4,11 @@ from utils.text_chunk import split_into_chunks
 import replicate
 from concurrent.futures import ThreadPoolExecutor
 from pydantic import BaseModel
+import zipfile
+import os
+import requests
+
+img_list=[]
 
 class PromptResponse(BaseModel):
     prompt: str
@@ -57,10 +62,23 @@ def process_input(file,model,aspect_ratio):
         prompts = [future.result() for future in futures]
     
     with ThreadPoolExecutor() as executor:
+        global img_list
         futures = [executor.submit(generate_image, prompt,model,aspect_ratio) for prompt in prompts]
         images = [future.result() for future in futures]
-        
-    return list(zip(chunks, prompts, images)),images
+        img_list=images
+    return list(zip(chunks, prompts, images)),images,images
+
+def zip_images(images):
+    zip_filename = "images.zip"
+    with zipfile.ZipFile(zip_filename, 'w') as zipf:
+        for i, img_url in enumerate(images):
+            img_data = requests.get(img_url).content
+            img_filename = f"image_{i}.png"
+            with open(img_filename, 'wb') as img_file:
+                img_file.write(img_data)
+            zipf.write(img_filename)
+            os.remove(img_filename)
+    return zip_filename
 
 with gr.Blocks() as iface:
     gr.Markdown("# STORY CREATOR")
@@ -68,17 +86,24 @@ with gr.Blocks() as iface:
     
     file_input = gr.File(file_types=[".txt"], label="Upload Text File")
     model_dropdown = gr.Dropdown(choices=["schnell", "dev", "pro"], label="Select Model", value="schnell")
-    aspect_ratio = gr.Dropdown(choices=["16:9", "4:3", "1:1"], label="Aspect Ratio", value="1:1")
+    aspect_ratio = gr.Dropdown(choices=["16:9","9:16", "4:3", "1:1"], label="Aspect Ratio", value="1:1")
 
     
     confirm_button = gr.Button("Confirm")
     output_table = gr.Dataframe(headers=["Chunk", "Prompt", "Image URL"], elem_id="output-table")
     output_gallery = gr.Gallery(label="Generated Images")
+    download_button = gr.Button("Download All Images")
+    image_state = gr.State([])  
     
     confirm_button.click(
         fn=process_input,
-        inputs=[file_input, model_dropdown],
-        outputs=[output_table,output_gallery]
+        inputs=[file_input, model_dropdown, aspect_ratio],
+        outputs=[output_table,output_gallery,image_state]
+    )
+    download_button.click(
+        fn=zip_images,
+        inputs=[image_state],
+        outputs=[gr.File(label="Download Images")]
     )
 
 if __name__ == "__main__":
