@@ -8,3 +8,6 @@ scipy
 moviepy
 gdown
 librosa
+gradio
+openai
+replicate

@@ -1,10 +1,26 @@
+## RUN APP ONLY
+
+````bash
+pip install openai replicate gradio pydantic
+```
+
+``` bash
+export OPENAI_API_KEY=
+```
+``` bash
+export REPLICATE_API_TOKEN=
+```
+``` bash
+python app.py
+```
+
 # Installation
 
 Install `llama-cpp-python`, change version of `llama-cpp-python` to fix with `CUDA` version on machine
 
 ```bash
 pip install --no-cache-dir llama-cpp-python==0.2.83 --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu124
-```
+````
 
 Install other lib
 
@@ -16,9 +32,9 @@ apt install vim
 
 Dowload model
 
-- `Mistral-7b` for generate prompt
-- `Dreamshaper-XL-turbo` + `add-detail-xl` (LoRA) for image generation
-- `suno/bark` for TTS, [`HERE`](https://suno-ai.notion.site/8b8e8749ed514b0cbf3f699013548683?v=bc67cff786b04b50b3ceb756fd05f68c) is sample voice of `suno/bark`
+-   `Mistral-7b` for generate prompt
+-   `Dreamshaper-XL-turbo` + `add-detail-xl` (LoRA) for image generation
+-   `suno/bark` for TTS, [`HERE`](https://suno-ai.notion.site/8b8e8749ed514b0cbf3f699013548683?v=bc67cff786b04b50b3ceb756fd05f68c) is sample voice of `suno/bark`
 
 ```bash
 mkdir model
@@ -81,6 +97,7 @@ python3 render_video.py \
 --sub-alignment mid \
 --sub-color yellow
 ```
+
 Multi input
 
 ```bash
@@ -118,6 +135,7 @@ for i in {1..10} do
     --sub-color yellow
 done
 ```
+
 Upload export folder
 
 ```bash
@@ -126,6 +144,7 @@ tar -czvf export_backup.tar.gz export/
 
 curl bashupload.com -T export_backup.tar.gz
 ```
+
 ```
 
 
@@ -138,3 +157,4 @@ curl bashupload.com -T export_backup.tar.gz
 - `utils.convert_prompt.convert_prompt` turns each chunk to a image decription which use to generate image in `utils.image_gen.image_generate`
 - Each chunk also feed into `utils.voice_gen.tts` to generate voice
 - All voice fragment and images are saved in `export/`, using `utils.video_create.create_video` to combine all of theme to a full video with voice and transcription
+```
