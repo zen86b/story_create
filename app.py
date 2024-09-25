@@ -26,16 +26,16 @@ def generate_prompt(chunk):
     prompt = response.choices[0].message.parsed.prompt
     return prompt
 
-def generate_image(prompt,model="schnell"):
+def generate_image(prompt,model="schnell",aspect_ratio="1:1"):
     input = {
         "prompt": "((Hyper Realistic, In Real Life))" +prompt,
-        "go_fast": True,
+        "go_fast": False,
         "num_outputs": 1,
-        "aspect_ratio": "16:9",
+        "aspect_ratio": aspect_ratio,
         "output_format": "png",
         "output_quality": 100,
-        "guidance":5
-        
+        "guidance":5,
+        "num_inference_steps":50
     }
 
     output = replicate.run(
@@ -44,7 +44,7 @@ def generate_image(prompt,model="schnell"):
     )
     return output[0]
 
-def process_input(file,model):
+def process_input(file,model,aspect_ratio):
     if file is None:
         return "No file provided."
     
@@ -57,7 +57,7 @@ def process_input(file,model):
         prompts = [future.result() for future in futures]
     
     with ThreadPoolExecutor() as executor:
-        futures = [executor.submit(generate_image, prompt,model) for prompt in prompts]
+        futures = [executor.submit(generate_image, prompt,model,aspect_ratio) for prompt in prompts]
         images = [future.result() for future in futures]
         
     return list(zip(chunks, prompts, images)),images
@@ -68,6 +68,7 @@ with gr.Blocks() as iface:
     
     file_input = gr.File(file_types=[".txt"], label="Upload Text File")
     model_dropdown = gr.Dropdown(choices=["schnell", "dev", "pro"], label="Select Model", value="schnell")
+    aspect_ratio = gr.Dropdown(choices=["16:9", "4:3", "1:1"], label="Aspect Ratio", value="1:1")
 
     
     confirm_button = gr.Button("Confirm")
