@@ -19,6 +19,8 @@ parser.add_argument("--height", type=int, default=720, help="Height of generated
 parser.add_argument("--width", type=int, default=1280, help="Width of generated image")
 parser.add_argument("--voice-preset", type=str, default="en_speaker_6", help="Code of voice preset using to generate voice")
 
+parser.add_argument("--images-only", action="store_true", default=False)
+
 # create video param
 parser.add_argument("--create-video", action="store_true", default=False, help="Enable create video after generation")
 parser.add_argument("--video-dim-h", type=int, default=1080, help="Height of output video")
@@ -86,6 +88,10 @@ image_generate(
     output_dir=os.path.join(output_dir, "image"),
 )
 print("*** Finish image generate ***")
+
+if args.images_only:
+    print(f"Result is saved in {output_dir}")
+    exit()
 
 # Text to speech
 print("*** Start voice generate ***")
