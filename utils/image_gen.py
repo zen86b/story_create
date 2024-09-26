@@ -13,8 +13,8 @@ lora_weight = ""
 def image_generate(
     prompts,
     negative_prompt=None,
-    height=1024,
-    width=1024,
+    height=1280,  # Đặt kích thước dọc 720x1280
+    width=720,
     num_inference_steps=50,
     guidance_scale=3.5,
     num_images_per_prompt=1,
@@ -32,31 +32,11 @@ def image_generate(
         model_path, torch_dtype=torch.float16, token="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"
     ).to("cuda")
 
-    # if lora_weight != "":
-    #     pipe.load_lora_weights(lora_weight)
-    #     lora_opt = {"cross_attention_kwargs": {"scale": 1}}
-
     names = []
 
     for idx, prompt in enumerate(prompts):
-        # with torch.no_grad():
-        #     compel_proc = Compel(
-        #         tokenizer=[pipe.tokenizer, pipe.tokenizer_2],
-        #         text_encoder=[pipe.text_encoder, pipe.text_encoder_2],
-        #         returned_embeddings_type=ReturnedEmbeddingsType.PENULTIMATE_HIDDEN_STATES_NON_NORMALIZED,
-        #         requires_pooled=[False, True],
-        #     )
-        #     prompt_embeds, pooled_prompt_embeds = compel_proc(prompt)
-        #     if negative_prompt is not None:
-        #         negative_prompt_embeds, negative_pooled_prompt_embeds = compel_proc(
-        #             negative_prompt
-        #         )
-        #     else:
-        #         negative_prompt_embeds, negative_pooled_prompt_embeds = None, None
-
         results = pipe(
             prompt=prompt,
-            # negative_prompt=negative_prompt,
             height=height,
             width=width,
             num_inference_steps=num_inference_steps,
