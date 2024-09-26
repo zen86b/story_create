@@ -3,7 +3,6 @@
 ````bash
 pip install openai replicate gradio pydantic
 ```
-
 ``` bash
 export OPENAI_API_KEY=
 ```
@@ -13,6 +12,7 @@ export REPLICATE_API_TOKEN=
 ``` bash
 python app.py
 ```
+````
 
 # Installation
 
@@ -65,6 +65,15 @@ python3 run.py -h
 ```
 
 Example:
+
+Image Only
+
+```bash
+python3 run.py \
+--input tmp.txt --create-video \
+--height 1920 --width 1080 \
+--images-only
+```
 
 ```bash
 python3 run.py \
