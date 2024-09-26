@@ -69,7 +69,7 @@ Image Only
 ```bash
 python3 run.py \
 --input tmp.txt --create-video \
---height 1920 --width 1080 \
+--height 1280 --width 720 \
 --images-only
 ```
 ```bash
