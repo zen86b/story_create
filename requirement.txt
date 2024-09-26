@@ -11,3 +11,5 @@ librosa
 gradio
 openai
 replicate
+protobuf
+sentencepiece
