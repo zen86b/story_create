@@ -72,7 +72,14 @@ python3 run.py \
 --height 1920 --width 1080 \
 --images-only
 ```
-
+```bash
+for file in tmp.txt tmp2.txt tmp3.txt; do
+    python3 run.py \
+    --input "$file" --create-video \
+    --height 1280 --width 720 \
+    --images-only
+done
+```
 Example:
 
 ```bash
