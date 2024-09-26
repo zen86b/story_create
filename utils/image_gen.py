@@ -15,7 +15,7 @@ def image_generate(
     negative_prompt=None,
     height=1280,
     width=720,
-    num_inference_steps=5,
+    num_inference_steps=30,
     guidance_scale=3.5,
     num_images_per_prompt=1,
     seed=-1,
