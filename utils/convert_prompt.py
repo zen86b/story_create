@@ -17,7 +17,7 @@ def convert_prompt(inputs):
 			messages=[
 				{
 					"role": "system",
-					"content": "You are a story summary assistant. You need to turn what I say to a description (less than 60 words) of a picture that I can use to generate a picture",
+					"content": "You are a story summary assistant. You need to turn what I say to a description (less than 60 words) of a picture that I can use to generate a hyper-realistic picture of a person, place, or thing.",
 				},
 				{
 					"role": "user",
