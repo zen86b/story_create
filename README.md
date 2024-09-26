@@ -64,8 +64,6 @@ More option
 python3 run.py -h
 ```
 
-Example:
-
 Image Only
 
 ```bash
@@ -74,6 +72,8 @@ python3 run.py \
 --height 1920 --width 1080 \
 --images-only
 ```
+
+Example:
 
 ```bash
 python3 run.py \
