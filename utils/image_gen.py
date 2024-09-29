@@ -7,7 +7,7 @@ from compel import Compel, ReturnedEmbeddingsType
 from diffusers import FluxPipeline
 
 model_path = "black-forest-labs/FLUX.1-dev"
-lora_weight = ""
+lora_weight = "XLabs-AI/flux-RealismLora"
 
 
 def image_generate(
@@ -31,6 +31,7 @@ def image_generate(
     pipe = FluxPipeline.from_pretrained(
         model_path, torch_dtype=torch.float16, token="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"
     ).to("cuda")
+    pipe.load_lora_weights(lora_weight)
 
     names = []
 
